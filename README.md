@@ -5,6 +5,7 @@
 - Python 3.6.7
 - pandas 0.23.4
 - xlrd 1.1.0
+- openpyxl 2.5.11
 
 # インストール方法
 [PythonインストールWindows](https://www.python.jp/install/windows/install_py3.html)
@@ -14,3 +15,5 @@
 `$ pip install pandas`
 
 `$ pip3 install xlrd`
+
+`$ pip3 install openpyxl`
