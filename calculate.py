@@ -1,6 +1,8 @@
 import pandas as pd
+import glob
 import sys
 
+#第一引数に学年、第二引数にクラス
 args = sys.argv
 age = args[1]
 clas = args[2]
@@ -19,7 +21,6 @@ input_sheet_df = input_book.parse(input_sheet_name[0])
 df_answer = input_sheet_df.set_index("学籍番号（は不要）")
 
 #直書きしてるが、表を参照するようにしたい
-#特定の数字で始まったものを出力するようにしたい
 
 df_know_1=df_answer.ix[:,["03 仕様書を読んでプログラムを作成するとき，プログラムの完成形を想像できる","08 類似のプログラムがなくても，一からプログラムを記述できる","11 順を追って論理的にプログラムを記述できる","16 プログラムを読むことで，大まかな動作を想像できる","19 プログラムを読むことにより，そのプログラムがどのような処理・動作を行うのかを把握する","26 プログラムが思ったとおりに動作しないとき，別のやり方を思いつく"]].mean(axis='columns') 
 df_know_2=df_answer.ix[:,["04 エラーメッセージの英語の内容を理解できる","05 エラーメッセージが表示されたとき，そのエラーメッセージの内容を理解できる"]].mean(axis='columns') 
@@ -32,22 +33,28 @@ df_answer = pd.concat([df_know_1,df_know_2,df_know_3,df_know_4,df_atti_1,df_atti
 
 df_answer.columns=["構想・設計","エラーメッセージ理解","デバッグ","文法知識","積極性","他者活用","Web活用"]
 
-input_book = pd.ExcelFile('studentlist.xlsx')
 
-#sheet_namesメソッドでExcelブック内の各シートの名前をリストで取得できる
-input_sheet_name = input_book.sheet_names
+#学生のリストを読み込む
+input_files =  glob.glob("studentlist/*.xlsx")
+df_studentlists = []
+for i, filename in enumerate(input_files):
+    input_books = pd.ExcelFile(filename)
 
-#シートの１番目をDataflameに変換
-input_sheet_df = input_book.parse(input_sheet_name[0])
+    #sheet_namesメソッドでExcelブック内の各シートの名前をリストで取得できる
+    input_sheet_name = input_books.sheet_names
 
-#学生情報のdataframeを作成
-df_studentlist = input_sheet_df.set_index("ID").drop_duplicates()
+    #シートの１番目をDataflameに変換
+    input_sheet_df = input_books.parse(input_sheet_name[0])
+
+    #学生情報のdataframeを作成
+    df_studentlists.append(input_sheet_df.set_index("ID").drop_duplicates())
+
+df_studentlist = pd.concat(df_studentlists)
 
 #回答結果と結合
 df_combined = pd.concat([df_answer,df_studentlist], axis=1, join="inner")
 
 df_output = df_combined.query("(Grade == @age)&(Class == @clas)")
 
-print(df_output)
 #excelファイルとして出力
 df_output.to_excel("output.xlsx")
