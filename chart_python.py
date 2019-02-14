@@ -55,7 +55,8 @@ def radar_factory(num_vars, frame='polygon'):
                 line.set_data(x, y)
 
         def set_varlabels(self, labels):
-            self.set_thetagrids(np.degrees(theta), labels)
+            # self.set_thetagrids(np.degrees(theta), labels)
+            self.set_thetagrids(np.degrees(theta)%360, labels)
 
         def _gen_axes_patch(self):
             return self.draw_patch()
@@ -117,8 +118,14 @@ if __name__ == '__main__':
         ax.set_rgrids([1.0, 3.0, 5.0, 7.0])
         # 塗りつぶしなしの線だけでチャート描画
         for d, color in zip(case_data, colors):
-            ax.plot(theta, d, color=color)
+            ax.plot(theta, d, color=color, marker='o')
         ax.set_varlabels(spoke_labels)
+
+    ax.yaxis.grid(False)
+    ax.plot(theta, [1]*N, 'k-', marker=None, linewidth=0.5, alpha=0.3)
+    ax.plot(theta, [3]*N, 'k-', marker=None, linewidth=0.5, alpha=0.3)
+    ax.plot(theta, [5]*N, 'k-', marker=None, linewidth=0.5, alpha=0.3)
+    ax.plot(theta, [5]*N, 'k-', marker=None, linewidth=0.5, alpha=0.3)
     # 凡例を配置
     labels = ('Grade1-1', 'Grade1-2', 'Grade2-1', 'Grade2-2', 'Grade3-1')
     legend = axes.legend(labels, loc=(0.9, .95),
