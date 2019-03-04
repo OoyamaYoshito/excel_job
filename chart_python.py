@@ -4,7 +4,7 @@ from PIL import Image
 import numpy as np
 import openpyxl
 import matplotlib
-font = {"family":"AppleGothic"}
+font = {"family":"IPAexGothic"}
 matplotlib.rc('font', **font)
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
@@ -84,29 +84,33 @@ def radar_factory(num_vars, frame='polygon'):
 # 多角形の頂点を返す((0.5, 0.5)中心の単位円が基準）
 def unit_poly_verts(theta):
     x0, y0, r = [0.5] * 3
-    verts = [(r*np.cos(t) + x0, r*np.sin(t) + y0) for t in theta]
+    verts = [(r*np.cos(t)*0.96 + x0, r*np.sin(t)*0.96 + y0) for t in theta]
     return verts
 
 # ここはExcelデータに置き換える
-def import_data():
-    data = [
-        ['01', '02', '03', '04', '05', '06', '07', '08'],
-        ('Graph', [
-            [7.00, 3.83, 5.00, 5.50, 3.83, 4.00, 4.33, 4.00],
-            [4.00, 4.50, 3.50, 5.00, 4.17, 3.20, 4.33, 5.00],
-            [0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00]])
-    ]
-    return data
+# def import_data(import_data):
+#     data = [
+#         ['01', '02', '03', '04', '05', '06', '07', '08'],
+#         ('Graph', [
+#             [7.00, 3.83, 5.00, 5.50, 3.83, 4.00, 4.33, 4.00],
+#             [4.00, 4.50, 3.50, 5.00, 4.17, 3.20, 4.33, 5.00],
+#             [0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00]])
+#     ]
+#     return data
 
 
-if __name__ == '__main__':
+def draw_chart(import_data):
     N = 8
     theta = radar_factory(N, frame='polygon')
 
-    data = import_data()
+    # data = import_data()
+    data = [
+        ["プログラミング得意度","構想・設計","エラーメッセージ理解","デバッグ","文法知識","積極性","他者活用","Web活用"],
+        ('Graph', import_data)
+    ]
     spoke_labels = data.pop(0)
 
-    figure, axes = plt.subplots(figsize=(8, 8), nrows=1, ncols=1,
+    figure, axes = plt.subplots(figsize=(5, 4), nrows=1, ncols=1,
                              subplot_kw=dict(projection='radar'))
 
     # figure.subplots_adjust(wspace=0.25, hspace=0.20, top=0.85, bottom=0.05)
@@ -128,7 +132,7 @@ if __name__ == '__main__':
     ax.plot(theta, [5]*N, 'k-', marker=None, linewidth=0.5, alpha=0.3)
     # 凡例を配置
     labels = ('Grade1-1', 'Grade1-2', 'Grade2-1', 'Grade2-2', 'Grade3-1')
-    legend = axes.legend(labels, loc=(0.9, .95),
+    legend = axes.legend(labels, loc=(0.95, .9),
                        labelspacing=0.1, fontsize='small')
     # 作成したチャートを画像出力
     plt.savefig('graph.png')

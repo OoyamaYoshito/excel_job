@@ -1,3 +1,5 @@
+# coding: UTF-8
+
 import pandas as pd
 import glob
 import sys
@@ -16,7 +18,8 @@ def search(age, class_name):
 
         #indexを学籍番号に変更
         #index名に学籍番号（は不要）が含まれるので削除したい
-        df_answers = input_sheet_df.set_index("学籍番号（は不要）")
+        index_cell=input_sheet_df.columns.values[0]
+        df_answers = input_sheet_df.set_index(index_cell)
 
         #直書きしてるが、表を参照するようにしたい
 
@@ -49,7 +52,7 @@ def search(age, class_name):
         input_sheet_df = input_book.parse(input_sheet_name[0])
 
         #学生情報のdataframeを作成
-        df_studentlists.append(input_sheet_df.set_index("ID").drop_duplicates())
+        df_studentlists.append(input_sheet_df.set_index("ID"))
 
     df_studentlist = pd.concat(df_studentlists)
 
