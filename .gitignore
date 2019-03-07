@@ -1,3 +1,5 @@
 studentlist/*
-*.xlsx
+answersdata/*
+output.xlsx
+out.xlsx
 .DS_Store
