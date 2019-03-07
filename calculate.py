@@ -18,8 +18,9 @@ def search(age, class_name):
 
         #indexを学籍番号に変更
         #index名に学籍番号（は不要）が含まれるので削除したい
-        index_cell=input_sheet_df.columns.values[0]
-        df_answers = input_sheet_df.set_index(index_cell)
+        
+        student_number_cell=[s for s in list(input_sheet_df.columns.values) if "学籍番号" in s]
+        df_answers = input_sheet_df.set_index(student_number_cell[0])
 
         #直書きしてるが、表を参照するようにしたい
 
