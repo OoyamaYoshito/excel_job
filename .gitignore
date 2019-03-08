@@ -1,3 +1,8 @@
 studentlist/*
-*.xlsx
+answersdata/*
+output.xlsx
+out.xlsx
 .DS_Store
+graph.png
+graph_resize.png
+__pycache__/*
