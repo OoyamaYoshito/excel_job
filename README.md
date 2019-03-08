@@ -26,3 +26,16 @@
 `$ pip3 install numpy`
 
 `$ pip3 install matplotlib`
+
+# 使い方
+インストール方法に従って、Python3と必要なライブラリをインストールする
+
+answersdata/ studentlist/　ディレクトリを作成する
+
+studentlist/に学生情報が入ったxlsxファイルを1つだけ入れる（ファイル名は問わない）
+
+answersdata/にアンケートの回答結果を入れる（ファイル名は201907.xlsx,202004.xlsxなど実施時期にする）
+
+IPAexフォントの中から[IPAexゴシック](https://ipafont.ipa.go.jp/)をインストール
+
+環境ごとのインストール方法についてはIPAexフォントの[インストール方法のページ](https://ipafont.ipa.go.jp/node72#jp)を参照すること
