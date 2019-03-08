@@ -110,7 +110,7 @@ def draw_chart(import_data):
     ]
     spoke_labels = data.pop(0)
 
-    figure, axes = plt.subplots(figsize=(5, 4), nrows=1, ncols=1,
+    figure, axes = plt.subplots(figsize=(6, 4), nrows=1, ncols=1,
                              subplot_kw=dict(projection='radar'))
 
     # figure.subplots_adjust(wspace=0.25, hspace=0.20, top=0.85, bottom=0.05)
@@ -131,7 +131,7 @@ def draw_chart(import_data):
     ax.plot(theta, [5]*N, 'k-', marker=None, linewidth=0.5, alpha=0.3)
     ax.plot(theta, [5]*N, 'k-', marker=None, linewidth=0.5, alpha=0.3)
     # 凡例を配置
-    labels = ('Grade1-1', 'Grade1-2', 'Grade2-1', 'Grade2-2', 'Grade3-1')
+    labels = ('1年前期終了時', '2年前期開始時', '2年前期終了時', '2年後期終了時', '2年前期終了時平均')
     legend = axes.legend(labels, loc=(0.95, .9),
                        labelspacing=0.1, fontsize='small')
     # 作成したチャートを画像出力
