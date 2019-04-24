@@ -58,6 +58,9 @@ def search(age, class_name):
         #学生情報のdataframeを作成
         df_studentlists.append(input_sheet_df.set_index("ID"))
 
+    if not df_studentlists:
+        print ("学生情報データ(studentlist)が取得できません")
+        sys.exit()
     df_studentlist = pd.concat(df_studentlists)
 
     #指定されたクラスのデータを引き出す
