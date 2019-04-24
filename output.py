@@ -1,5 +1,6 @@
 # coding: UTF-8
 
+import sys
 import openpyxl
 import numpy as np
 import pandas as pd
@@ -28,7 +29,14 @@ def question_result_output(personal_info, answerdata,ws):
 
 
 if __name__ == "__main__":
-    classdata,answerdatas=calculate.search("2","Z")
+    if len(sys.argv) == 3:
+        args = sys.argv
+        stgrade = args[1]
+        stclass = args[2]
+    else:
+        print ("Usage: python "+sys.argv[0]+" <学年> <クラス>")
+        sys.exit()
+    classdata,answerdatas=calculate.search(stgrade,stclass)
     wb = openpyxl.load_workbook('templete.xlsx')
     ws = wb.worksheets[0]
     for sheet_name in list(classdata.index):
