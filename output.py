@@ -35,6 +35,7 @@ def output_class(stgrade, stclass):
     ws = wb.worksheets[0]
     if classdata.index.size == 0:
         print ("クラスのデータが取得できませんでした")
+        return
     for sheet_name in list(classdata.index):
         ws_copy = wb.copy_worksheet(ws)
         ws_copy.title=str(sheet_name)
