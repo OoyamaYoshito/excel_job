@@ -38,6 +38,9 @@ def search(age, class_name):
         #df_answers["日時"]=filename.lstrip("answersdata/").rstrip(".xlsx")
         df_answerdata.append(df_answers)
 
+    if not df_answerdata:
+        print ("アンケート回答データが取得できません")
+        sys.exit()
     df_answer = pd.concat(df_answerdata)
 
     #学生のリストを読み込む
