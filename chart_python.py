@@ -144,3 +144,4 @@ def draw_chart(import_data):
     wb.save('out.xlsx')
     # pil_img = Image.fromarray(plt.savefig('graph.png'))
     # pil_img.save('data/dst/lena_square_save.png')
+    plt.close()
