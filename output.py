@@ -1,5 +1,6 @@
 # coding: UTF-8
 
+import sys
 import openpyxl
 import numpy as np
 import pandas as pd
@@ -26,9 +27,10 @@ def question_result_output(personal_info, answerdata,ws):
     img = openpyxl.drawing.image.Image('graph.png')
     ws.add_image( img, 'B13' )
 
-
-if __name__ == "__main__":
-    classdata,answerdatas=calculate.search("2","Z")
+#一クラス分のExcel生成
+def output_class(stgrade, stclass):
+    classdata,answerdatas=calculate.search(stgrade,stclass)
+    fn = 'output' + stgrade + stclass + '.xlsx'
     wb = openpyxl.load_workbook('templete.xlsx')
     ws = wb.worksheets[0]
     if classdata.index.size == 0:
@@ -36,9 +38,9 @@ if __name__ == "__main__":
     for sheet_name in list(classdata.index):
         ws_copy = wb.copy_worksheet(ws)
         ws_copy.title=str(sheet_name)
-    wb.save('output.xlsx')
+    wb.save(fn)
     for i, student_number in enumerate(list(classdata.index)):
-        wb = openpyxl.load_workbook('output.xlsx')
+        wb = openpyxl.load_workbook(fn)
         personal_info = classdata.loc[student_number].values
         personal_info = np.insert(personal_info,0,student_number)
         answerdata = []
@@ -48,4 +50,16 @@ if __name__ == "__main__":
         for _ in range(4-len(answerdata)):
             answerdata.append([0,0,0,0,0,0,0,0]) 
         question_result_output(personal_info,answerdata,wb.worksheets[i+1])
-        wb.save('output.xlsx')
+        wb.save(fn)
+
+if __name__ == "__main__":
+    if len(sys.argv) == 3:
+        args = sys.argv
+        stgrade = args[1]
+        stclass = args[2]
+    else:
+        print ("Usage: python "+sys.argv[0]+" <学年> <クラス>")
+        sys.exit()
+    for g in stgrade:
+        for c in stclass:
+            output_class(g, c)
