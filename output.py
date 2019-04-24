@@ -37,14 +37,15 @@ if __name__ == "__main__":
         print ("Usage: python "+sys.argv[0]+" <学年> <クラス>")
         sys.exit()
     classdata,answerdatas=calculate.search(stgrade,stclass)
+    fn = 'output' + stgrade + stclass + '.xlsx'
     wb = openpyxl.load_workbook('templete.xlsx')
     ws = wb.worksheets[0]
     for sheet_name in list(classdata.index):
         ws_copy = wb.copy_worksheet(ws)
         ws_copy.title=str(sheet_name)
-    wb.save('output.xlsx')
+    wb.save(fn)
     for i, student_number in enumerate(list(classdata.index)):
-        wb = openpyxl.load_workbook('output.xlsx')
+        wb = openpyxl.load_workbook(fn)
         personal_info = classdata.loc[student_number].values
         personal_info = np.insert(personal_info,0,student_number)
         answerdata = []
@@ -54,4 +55,4 @@ if __name__ == "__main__":
         for _ in range(4-len(answerdata)):
             answerdata.append([0,0,0,0,0,0,0,0]) 
         question_result_output(personal_info,answerdata,wb.worksheets[i+1])
-        wb.save('output.xlsx')
+        wb.save(fn)
