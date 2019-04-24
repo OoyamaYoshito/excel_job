@@ -27,15 +27,8 @@ def question_result_output(personal_info, answerdata,ws):
     img = openpyxl.drawing.image.Image('graph.png')
     ws.add_image( img, 'B13' )
 
-
-if __name__ == "__main__":
-    if len(sys.argv) == 3:
-        args = sys.argv
-        stgrade = args[1]
-        stclass = args[2]
-    else:
-        print ("Usage: python "+sys.argv[0]+" <学年> <クラス>")
-        sys.exit()
+#一クラス分のExcel生成
+def output_class(stgrade, stclass):
     classdata,answerdatas=calculate.search(stgrade,stclass)
     fn = 'output' + stgrade + stclass + '.xlsx'
     wb = openpyxl.load_workbook('templete.xlsx')
@@ -56,3 +49,15 @@ if __name__ == "__main__":
             answerdata.append([0,0,0,0,0,0,0,0]) 
         question_result_output(personal_info,answerdata,wb.worksheets[i+1])
         wb.save(fn)
+
+if __name__ == "__main__":
+    if len(sys.argv) == 3:
+        args = sys.argv
+        stgrade = args[1]
+        stclass = args[2]
+    else:
+        print ("Usage: python "+sys.argv[0]+" <学年> <クラス>")
+        sys.exit()
+    for g in stgrade:
+        for c in stclass:
+            output_class(g, c)
