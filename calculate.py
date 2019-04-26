@@ -9,6 +9,7 @@ def search(age, class_name):
     input_files = glob.glob("answersdata/*.xlsx")
     df_answerdata = []
     for i, filename in enumerate(input_files):
+        print (filename)
         input_book = pd.ExcelFile(filename)
         #sheet_namesメソッドでExcelブック内の各シートの名前をリストで取得できる
         input_sheet_name = input_book.sheet_names
@@ -21,10 +22,15 @@ def search(age, class_name):
         
         student_number_cell=[s for s in list(input_sheet_df.columns.values) if "学籍番号" in s]
         df_answers = input_sheet_df.set_index(student_number_cell[0])
+        #print(df_answers)
 
         #直書きしてるが、表を参照するようにしたい
 
-        df_program=df_answers.ix[:,["27 プログラミングが得意である"]].mean(axis='columns') 
+        try:
+            df_program=df_answers.ix[:,["27 プログラミングが得意である"]].mean(axis='columns') 
+        except KeyError:
+            print(input_sheet_df.columns.values)
+            df_program=df_answers.ix[:,["# 回答1.31"]].mean(axis='columns') 
         df_know_1 =df_answers.ix[:,["03 仕様書を読んでプログラムを作成するとき，プログラムの完成形を想像できる","08 類似のプログラムがなくても，一からプログラムを記述できる","11 順を追って論理的にプログラムを記述できる","16 プログラムを読むことで，大まかな動作を想像できる","19 プログラムを読むことにより，そのプログラムがどのような処理・動作を行うのかを把握する","26 プログラムが思ったとおりに動作しないとき，別のやり方を思いつく"]].mean(axis='columns') 
         df_know_2 =df_answers.ix[:,["04 エラーメッセージの英語の内容を理解できる","05 エラーメッセージが表示されたとき，そのエラーメッセージの内容を理解できる"]].mean(axis='columns') 
         df_know_3 =df_answers.ix[:,["20 プログラムが正しく動作しないとき，変数の値などを変更してみて動作を確認する","23 正しく動作しないとき，正しく動作するまでプログラムを少しずつ変更して動かしてみる"]].mean(axis='columns') 
