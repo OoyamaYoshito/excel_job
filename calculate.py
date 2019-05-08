@@ -21,6 +21,13 @@ def search(age, class_name):
         #index名に学籍番号（は不要）が含まれるので削除したい
         
         student_number_cell=[s for s in list(input_sheet_df.columns.values) if "学籍番号" in s]
+        skip=0
+        #「学籍番号」を含むセルがなかったら、見つけるまで行を読み飛ばす
+        while len(student_number_cell) == 0:
+            skip = skip + 1
+            input_sheet_df = input_book.parse(input_sheet_name[0], skiprows=skip)
+            columns = [str(s) for s in input_sheet_df.columns.values]
+            student_number_cell=[s for s in columns if "学籍番号" in s]
         df_answers = input_sheet_df.set_index(student_number_cell[0])
         #print(df_answers)
 
