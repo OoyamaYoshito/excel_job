@@ -99,7 +99,7 @@ def unit_poly_verts(theta):
 #     return data
 
 
-def draw_chart(import_data):
+def draw_chart(import_data, labels):
     N = 8
     theta = radar_factory(N, frame='polygon')
 
@@ -131,7 +131,7 @@ def draw_chart(import_data):
     ax.plot(theta, [5]*N, 'k-', marker=None, linewidth=0.5, alpha=0.3)
     ax.plot(theta, [5]*N, 'k-', marker=None, linewidth=0.5, alpha=0.3)
     # 凡例を配置
-    labels = ('1年前期終了時', '2年前期開始時', '2年前期終了時', '2年後期終了時', '2年前期終了時平均')
+    #labels = ('1年前期終了時', '2年前期開始時', '2年前期終了時', '2年後期終了時', '2年前期終了時平均')
     legend = axes.legend(labels, loc=(0.95, .9),
                        labelspacing=0.1, fontsize='small')
     # 作成したチャートを画像出力
