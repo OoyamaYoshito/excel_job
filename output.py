@@ -10,7 +10,7 @@ import chart_python
 import matplotlib.font_manager
 
 #一人分のアンケート結果を出力
-def question_result_output(personal_info, answerdata,ws):
+def question_result_output(personal_info, answerdata, ws, labels):
 
     #個人情報挿入
     for i, data in enumerate(personal_info):
@@ -23,7 +23,7 @@ def question_result_output(personal_info, answerdata,ws):
             ws.cell(7+i,2+j,data)
 
     #グラフ画像挿入
-    chart_python.draw_chart(answerdata)
+    chart_python.draw_chart(answerdata, labels)
     img = openpyxl.drawing.image.Image('graph.png')
     ws.add_image( img, 'B13' )
 
@@ -49,8 +49,12 @@ def output_class(stgrade, stclass):
             if student_number in list(yeardata.index):
                 answerdata.append(yeardata.loc[student_number].values)
         for _ in range(3-len(answerdata)):
-            answerdata.append([0,0,0,0,0,0,0,0]) 
-        question_result_output(personal_info,answerdata,wb.worksheets[i+1])
+            answerdata.append([0,0,0,0,0,0,0,0])
+        if stclass in ["G","H","I"]:
+            labels = ('1年前期終了時', '2年後期開始時', '2年後期終了時', '2年後期終了時平均')
+        else:
+            labels = ('1年前期終了時', '2年前期開始時', '2年前期終了時', '2年前期終了時平均')
+        question_result_output(personal_info,answerdata,wb.worksheets[i+1],labels)
         wb.save(fn)
 
 if __name__ == "__main__":
