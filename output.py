@@ -48,7 +48,7 @@ def output_class(stgrade, stclass):
         for yeardata in answerdatas:
             if student_number in list(yeardata.index):
                 answerdata.append(yeardata.loc[student_number].values)
-        for _ in range(4-len(answerdata)):
+        for _ in range(3-len(answerdata)):
             answerdata.append([0,0,0,0,0,0,0,0]) 
         question_result_output(personal_info,answerdata,wb.worksheets[i+1])
         wb.save(fn)
