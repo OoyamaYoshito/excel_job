@@ -93,12 +93,15 @@ def search(age, class_name):
     for i, df_answer in enumerate(df_answerdata):
         df_combined = pd.concat([df_answer,df_classdata], axis=1, join="inner")
         df_combined =df_combined.drop(columns=["Name(J)","Sex","Dept. & Course","Grade","Class"])
+        if len(df_combined.index) > 0:
+            df_mean = df_combined.mean()
         df_combineds.append(df_combined)
+    print(df_mean)
 
     #excelファイルとして出力
     #df_output.to_excel("output.xlsx")
 
-    return df_classdata, df_combineds
+    return df_classdata, df_combineds, df_mean
 
 if __name__ == "__main__":
     print(search('2','Z')) 

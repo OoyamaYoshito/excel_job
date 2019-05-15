@@ -29,7 +29,7 @@ def question_result_output(personal_info, answerdata, ws, labels):
 
 #一クラス分のExcel生成
 def output_class(stgrade, stclass):
-    classdata,answerdatas=calculate.search(stgrade,stclass)
+    classdata,answerdatas,averagedata=calculate.search(stgrade,stclass)
     fn = 'output' + stgrade + stclass + '.xlsx'
     wb = openpyxl.load_workbook('templete.xlsx')
     ws = wb.worksheets[0]
@@ -50,6 +50,7 @@ def output_class(stgrade, stclass):
                 answerdata.append(yeardata.loc[student_number].values)
         for _ in range(3-len(answerdata)):
             answerdata.append([0,0,0,0,0,0,0,0])
+        answerdata.append(averagedata)
         if stclass in ["G","H","I"]:
             labels = ('1年前期終了時', '2年後期開始時', '2年後期終了時', '2年後期終了時平均')
         else:
