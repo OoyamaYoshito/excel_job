@@ -7,6 +7,7 @@ import sys
 #データを整形し、学年とクラス名が一致する情報のみを出力する
 def search(age, class_name):
     input_files = glob.glob("answersdata/*.xls") + glob.glob("answersdata/*.xlsx")
+    input_files.sort()
     df_answerdata = []
     for i, filename in enumerate(input_files):
         print (filename)
