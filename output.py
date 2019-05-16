@@ -29,7 +29,7 @@ def question_result_output(personal_info, answerdata, ws, labels):
 
 #一クラス分のExcel生成
 def output_class(stgrade, stclass):
-    classdata,answerdatas=calculate.search(stgrade,stclass)
+    classdata,answerdatas,averagedata=calculate.search(stgrade,stclass)
     fn = 'output' + stgrade + stclass + '.xlsx'
     wb = openpyxl.load_workbook('templete.xlsx')
     ws = wb.worksheets[0]
@@ -55,6 +55,7 @@ def output_class(stgrade, stclass):
         labels = labels + (labels[len(answerdata)-1]+'平均',)
         for _ in range(3-len(answerdata)):
             answerdata.append([0,0,0,0,0,0,0,0])
+        answerdata.append(averagedata)
         question_result_output(personal_info,answerdata,wb.worksheets[i+1],labels)
         wb.save(fn)
 
