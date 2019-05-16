@@ -19,6 +19,7 @@ def question_result_output(personal_info, answerdata, ws, labels):
     
     #数字データ結果挿入
     for i, yeardata in enumerate(answerdata):
+        ws.cell(7+i,1,labels[i])
         for j,data in enumerate(yeardata):
             ws.cell(7+i,2+j,data)
 
