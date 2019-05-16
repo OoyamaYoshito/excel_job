@@ -48,12 +48,13 @@ def output_class(stgrade, stclass):
         for yeardata in answerdatas:
             if student_number in list(yeardata.index):
                 answerdata.append(yeardata.loc[student_number].values)
+        if stclass in ["G","H","I"]:
+            labels = ('1年前期終了時', '2年後期開始時', '2年後期終了時')
+        else:
+            labels = ('1年前期終了時', '2年前期開始時', '2年前期終了時')
+        labels = labels + (labels[len(answerdata)-1]+'平均',)
         for _ in range(3-len(answerdata)):
             answerdata.append([0,0,0,0,0,0,0,0])
-        if stclass in ["G","H","I"]:
-            labels = ('1年前期終了時', '2年後期開始時', '2年後期終了時', '2年後期終了時平均')
-        else:
-            labels = ('1年前期終了時', '2年前期開始時', '2年前期終了時', '2年前期終了時平均')
         question_result_output(personal_info,answerdata,wb.worksheets[i+1],labels)
         wb.save(fn)
 
