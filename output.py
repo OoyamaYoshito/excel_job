@@ -39,7 +39,11 @@ def output_class(stgrade, stclass):
     for sheet_name in list(classdata.index):
         ws_copy = wb.copy_worksheet(ws)
         ws_copy.title=str(sheet_name)
-    wb.save(fn)
+    try:
+        wb.save(fn)
+    except PermissionError:
+        print ("出力先のファイルが開かれているため、出力できません: " + fn)
+        sys.exit()
     for i, student_number in enumerate(list(classdata.index)):
         wb = openpyxl.load_workbook(fn)
         personal_info = classdata.loc[student_number].values
