@@ -14,7 +14,10 @@ def question_result_output(personal_info, answerdata, ws, labels):
 
     #個人情報挿入
     for i, data in enumerate(personal_info):
-        ws.cell(4,1+i,data)
+        if i < 1:
+            ws.cell(4,1+i,data)
+        else:
+            ws.cell(4,2+i,data)
     #ws.cell(4,1,personal_info)
     
     #数字データ結果挿入
@@ -48,7 +51,7 @@ def output_class(stgrade, stclass):
     for i, student_number in enumerate(list(classdata.index)):
         wb = openpyxl.load_workbook(fn)
         personal_info = classdata.loc[student_number].values
-        personal_info = np.insert(personal_info,0,student_number)
+        personal_info[0] = str(student_number) + " " + personal_info[0]
         answerdata = []
         for yeardata in answerdatas:
             if student_number in list(yeardata.index):
