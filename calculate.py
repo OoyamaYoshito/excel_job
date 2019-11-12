@@ -85,7 +85,11 @@ def search(age, class_name):
 
     #指定されたクラスのデータを引き出す
     df_classdata = df_studentlist.query("(Grade == @age)&(Class == @class_name)")
-    df_classdata = df_classdata.drop(columns=["Name(J_Kana)","Name(E) ","Absence","Ent.year"])
+    df_classdata = df_classdata.drop(columns=["Absence","Ent.year"])
+    try:
+        df_classdata = df_classdata.drop(columns=["Name(J_Kana)","Name(E) "])
+    except KeyError:
+        df_classdata = df_classdata.drop(columns=["Name\n(J Kana)","Name(E)"])
     df_classdata = df_classdata.ix[:,[0,1,3,4,2]]
 
     #アンケート結果用の数字データをもつ配列
