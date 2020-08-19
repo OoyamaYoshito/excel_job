@@ -35,23 +35,23 @@ def search(age, class_name):
         #直書きしてるが、表を参照するようにしたい
 
         try:
-            df_program=df_answers.ix[:,["# 回答1.55"]].mean(axis='columns') 
-            df_know_1 =df_answers.ix[:,["# 回答1.6","# 回答1.19","# 回答1.24","# 回答1.38","# 回答1.44","# 回答1.54"]].mean(axis='columns') 
-            df_know_2 =df_answers.ix[:,["# 回答1.9","# 回答1.13"]].mean(axis='columns') 
-            df_know_3 =df_answers.ix[:,["# 回答1.46","# 回答1.51"]].mean(axis='columns') 
-            df_know_4 =df_answers.ix[:,["# 回答1.21","# 回答1.31","# 回答1.36","# 回答1.39","# 回答1.43","# 回答1.48"]].mean(axis='columns') 
-            df_atti_1 =df_answers.ix[:,["# 回答1.4","# 回答1.16","# 回答1.22","# 回答1.26","# 回答1.53"]].mean(axis='columns') 
-            df_atti_2 =df_answers.ix[:,["# 回答1.17","# 回答1.34","# 回答1.52"]].mean(axis='columns') 
-            df_atti_3 =df_answers.ix[:,["# 回答1.5","# 回答1.50"]].mean(axis='columns') 
+            df_program=df_answers.loc[:,["# 回答1.55"]].mean(axis='columns') 
+            df_know_1 =df_answers.loc[:,["# 回答1.6","# 回答1.19","# 回答1.24","# 回答1.38","# 回答1.44","# 回答1.54"]].mean(axis='columns') 
+            df_know_2 =df_answers.loc[:,["# 回答1.9","# 回答1.13"]].mean(axis='columns') 
+            df_know_3 =df_answers.loc[:,["# 回答1.46","# 回答1.51"]].mean(axis='columns') 
+            df_know_4 =df_answers.loc[:,["# 回答1.21","# 回答1.31","# 回答1.36","# 回答1.39","# 回答1.43","# 回答1.48"]].mean(axis='columns') 
+            df_atti_1 =df_answers.loc[:,["# 回答1.4","# 回答1.16","# 回答1.22","# 回答1.26","# 回答1.53"]].mean(axis='columns') 
+            df_atti_2 =df_answers.loc[:,["# 回答1.17","# 回答1.34","# 回答1.52"]].mean(axis='columns') 
+            df_atti_3 =df_answers.loc[:,["# 回答1.5","# 回答1.50"]].mean(axis='columns') 
         except KeyError:
-            df_program=df_answers.ix[:,["# 回答1.31"]].mean(axis='columns') 
-            df_know_1 =df_answers.ix[:,["# 回答1.4","# 回答1.9","# 回答1.14","# 回答1.20","# 回答1.25","# 回答1.29"]].mean(axis='columns') 
-            df_know_2 =df_answers.ix[:,["# 回答1.11","# 回答1.17","# 回答1.23"]].mean(axis='columns') 
-            df_know_3 =df_answers.ix[:,["# 回答1.5","# 回答1.19","# 回答1.27","# 回答1.30"]].mean(axis='columns') 
-            df_know_4 =df_answers.ix[:,["# 回答1.7","# 回答1.10","# 回答1.13","# 回答1.16","# 回答1.22","# 回答1.28"]].mean(axis='columns') 
-            df_atti_1 =df_answers.ix[:,["# 回答1.1","# 回答1.6","# 回答1.12","# 回答1.18","# 回答1.26"]].mean(axis='columns') 
-            df_atti_2 =df_answers.ix[:,["# 回答1.2","# 回答1.8","# 回答1.24"]].mean(axis='columns') 
-            df_atti_3 =df_answers.ix[:,["# 回答1.3","# 回答1.15","# 回答1.21"]].mean(axis='columns') 
+            df_program=df_answers.loc[:,["# 回答1.31"]].mean(axis='columns') 
+            df_know_1 =df_answers.loc[:,["# 回答1.4","# 回答1.9","# 回答1.14","# 回答1.20","# 回答1.25","# 回答1.29"]].mean(axis='columns') 
+            df_know_2 =df_answers.loc[:,["# 回答1.11","# 回答1.17","# 回答1.23"]].mean(axis='columns') 
+            df_know_3 =df_answers.loc[:,["# 回答1.5","# 回答1.19","# 回答1.27","# 回答1.30"]].mean(axis='columns') 
+            df_know_4 =df_answers.loc[:,["# 回答1.7","# 回答1.10","# 回答1.13","# 回答1.16","# 回答1.22","# 回答1.28"]].mean(axis='columns') 
+            df_atti_1 =df_answers.loc[:,["# 回答1.1","# 回答1.6","# 回答1.12","# 回答1.18","# 回答1.26"]].mean(axis='columns') 
+            df_atti_2 =df_answers.loc[:,["# 回答1.2","# 回答1.8","# 回答1.24"]].mean(axis='columns') 
+            df_atti_3 =df_answers.loc[:,["# 回答1.3","# 回答1.15","# 回答1.21"]].mean(axis='columns') 
         df_answers = pd.concat([df_program,df_know_1,df_know_2,df_know_3,df_know_4,df_atti_1,df_atti_2,df_atti_3],axis=1)
 
         df_answers.columns=["プログラミング得意度","構想・設計","エラーメッセージ理解","デバッグ","文法知識","積極性","他者活用","Web活用"]
@@ -76,7 +76,10 @@ def search(age, class_name):
         input_sheet_df = input_book.parse(input_sheet_name[0])
 
         #学生情報のdataframeを作成
-        df_studentlists.append(input_sheet_df.set_index("ID"))
+        try:
+            df_studentlists.append(input_sheet_df.set_index("ID"))
+        except KeyError:
+            df_studentlists.append(input_sheet_df.set_index("学籍番号"))
 
     if not df_studentlists:
         print ("学生情報データ(studentlist)が取得できません")
@@ -85,18 +88,24 @@ def search(age, class_name):
 
     #指定されたクラスのデータを引き出す
     df_classdata = df_studentlist.query("(Grade == @age)&(Class == @class_name)")
+    if df_classdata.index.size == 0:
+        class_name = age + class_name
+        df_classdata = df_studentlist.query("(Grade == @age)&(Class == @class_name)")
     df_classdata = df_classdata.drop(columns=["Absence","Ent.year"])
-    try:
-        df_classdata = df_classdata.drop(columns=["Name(J_Kana)","Name(E) "])
-    except KeyError:
-        df_classdata = df_classdata.drop(columns=["Name\n(J Kana)","Name(E)"])
-    df_classdata = df_classdata.ix[:,[0,1,3,4,2]]
+    df_classdata = df_classdata.drop(columns=["Name(J_Kana)","Name(E) "],errors='ignore')
+    df_classdata = df_classdata.drop(columns=["Name\n(J Kana)","Name(E)"],errors='ignore')
+    df_classdata = df_classdata.drop(columns=["Name_J kana","Name_E"],errors='ignore')
+    df_classdata = df_classdata.iloc[:,[0,1,3,4,2]]
+    print(df_classdata)
 
     #アンケート結果用の数字データをもつ配列
     df_combineds = []
+    df_mean = []
     for i, df_answer in enumerate(df_answerdata):
         df_combined = pd.concat([df_answer,df_classdata], axis=1, join="inner")
-        df_combined =df_combined.drop(columns=["Name(J)","Sex","Dept. & Course","Grade","Class"])
+        df_combined =df_combined.drop(columns=["Name(J)"],errors='ignore')
+        df_combined =df_combined.drop(columns=["Name_J"],errors='ignore')
+        df_combined =df_combined.drop(columns=["Sex","Dept. & Course","Grade","Class"])
         if len(df_combined.index) > 0:
             df_mean = df_combined.mean()
         df_combineds.append(df_combined)
