@@ -32,9 +32,9 @@ def question_result_output(personal_info, answerdata, ws, labels):
     ws.add_image( img, 'B13' )
 
 #一クラス分のExcel生成
-def output_class(stgrade, stclass):
+def output_class(stgrade, stclass, outputpath):
     classdata,answerdatas,averagedata=calculate.search(stgrade,stclass)
-    fn = 'output' + stgrade + stclass + '.xlsx'
+    fn = outputpath + '/output' + stgrade + stclass + '.xlsx'
     wb = openpyxl.load_workbook('templete.xlsx')
     ws = wb.worksheets[0]
     if classdata.index.size == 0:
@@ -77,4 +77,4 @@ if __name__ == "__main__":
         sys.exit()
     for g in stgrade:
         for c in stclass:
-            output_class(g, c)
+            output_class(g, c, '.')
