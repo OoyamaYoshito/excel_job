@@ -32,8 +32,8 @@ def question_result_output(personal_info, answerdata, ws, labels):
     ws.add_image( img, 'B13' )
 
 #一クラス分のExcel生成
-def output_class(stgrade, stclass, outputpath='.', studentpath='studentlist'):
-    classdata,answerdatas,averagedata=calculate.search(stgrade,stclass,studentpath)
+def output_class(stgrade, stclass, outputpath='.', studentpath='studentlist', answerpath='answersdata'):
+    classdata,answerdatas,averagedata=calculate.search(stgrade,stclass,studentpath,answerpath)
     fn = outputpath + '/output' + stgrade + stclass + '.xlsx'
     wb = openpyxl.load_workbook('templete.xlsx')
     ws = wb.worksheets[0]
