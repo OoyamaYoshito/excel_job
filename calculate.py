@@ -5,7 +5,7 @@ import glob
 import sys
 
 #データを整形し、学年とクラス名が一致する情報のみを出力する
-def search(age, class_name):
+def search(age, class_name, studentpath="studentlist"):
     input_files = glob.glob("answersdata/*.xls") + glob.glob("answersdata/*.xlsx")
     input_files.sort()
     df_answerdata = []
@@ -64,7 +64,7 @@ def search(age, class_name):
     df_answer = pd.concat(df_answerdata)
 
     #学生のリストを読み込む
-    input_files =  glob.glob("studentlist/*.xlsx")
+    input_files =  glob.glob(studentpath + "/*.xlsx")
     df_studentlists = []
     for i, filename in enumerate(input_files):
         input_book = pd.ExcelFile(filename)
