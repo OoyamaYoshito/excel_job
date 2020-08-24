@@ -10,7 +10,7 @@ import chart_python
 import matplotlib.font_manager
 
 #一人分のアンケート結果を出力
-def question_result_output(personal_info, answerdata, ws, labels):
+def question_result_output(personal_info, answerdata, ws, labels, outputpath='.'):
 
     #個人情報挿入
     for i, data in enumerate(personal_info):
@@ -28,7 +28,7 @@ def question_result_output(personal_info, answerdata, ws, labels):
 
     #グラフ画像挿入
     chart_python.draw_chart(answerdata, labels)
-    img = openpyxl.drawing.image.Image('graph.png')
+    img = openpyxl.drawing.image.Image(outputpath + '/graph.png')
     ws.add_image( img, 'B13' )
 
 #一クラス分のExcel生成
@@ -64,7 +64,7 @@ def output_class(stgrade, stclass, outputpath='.', studentpath='studentlist', an
         for _ in range(3-len(answerdata)):
             answerdata.append([0,0,0,0,0,0,0,0])
         answerdata.append(averagedata)
-        question_result_output(personal_info,answerdata,wb.worksheets[i+1],labels)
+        question_result_output(personal_info,answerdata,wb.worksheets[i+1],labels,outputpath)
         wb.save(fn)
 
 if __name__ == "__main__":

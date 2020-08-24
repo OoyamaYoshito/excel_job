@@ -99,7 +99,7 @@ def unit_poly_verts(theta):
 #     return data
 
 
-def draw_chart(import_data, labels):
+def draw_chart(import_data, labels, outputpath='.'):
     N = 8
     theta = radar_factory(N, frame='polygon')
 
@@ -135,13 +135,11 @@ def draw_chart(import_data, labels):
     legend = axes.legend(labels, loc=(0.95, .9),
                        labelspacing=0.1, fontsize='small')
     # 作成したチャートを画像出力
-    plt.savefig('graph.png')
+    plt.savefig(outputpath + '/graph.png')
     # 出力したgraph.pngをout.xlsxに貼り付ける
     wb = openpyxl.Workbook()
     ws = wb.worksheets[0]
-    img = openpyxl.drawing.image.Image('graph.png')
+    img = openpyxl.drawing.image.Image(outputpath + '/graph.png')
     ws.add_image(img, 'B12')
-    wb.save('out.xlsx')
-    # pil_img = Image.fromarray(plt.savefig('graph.png'))
-    # pil_img.save('data/dst/lena_square_save.png')
+    wb.save(outputpath + '/out.xlsx')
     plt.close()
