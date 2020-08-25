@@ -59,7 +59,7 @@ def search(age, class_name, studentpath="studentlist", answerpath="answersdata")
 
     if not df_answerdata:
         print ("アンケート回答データが取得できません")
-        sys.exit()
+        return
     df_answer = pd.concat(df_answerdata)
 
     #学生のリストを読み込む
@@ -82,7 +82,7 @@ def search(age, class_name, studentpath="studentlist", answerpath="answersdata")
 
     if not df_studentlists:
         print ("学生情報データ(studentlist)が取得できません")
-        sys.exit()
+        return
     df_studentlist = pd.concat(df_studentlists)
 
     #指定されたクラスのデータを引き出す

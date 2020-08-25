@@ -47,7 +47,7 @@ def output_class(stgrade, stclass, outputpath='.', studentpath='studentlist', an
         wb.save(fn)
     except PermissionError:
         print ("出力先のファイルが開かれているため、出力できません: " + fn)
-        sys.exit()
+        return
     for i, student_number in enumerate(list(classdata.index)):
         wb = openpyxl.load_workbook(fn)
         personal_info = classdata.loc[student_number].values
