@@ -1,3 +1,17 @@
+outpath="/Users/member/git/excel_job/test"
+
+def output_excel(stgrade, stclass, outpath):
+    import output
+    student="/Users/member/git/excel_job/studentlist"
+    answer="/Users/member/git/excel_job/answersdata"
+    import re
+    import os
+    basepath=re.sub('/[^/]+$','/',__file__)
+    os.chdir(basepath)
+    for g in stgrade:
+        for c in stclass:
+            output.output_class(g,c,outputpath=outpath,studentpath=student,answerpath=answer)
+
 def wsgi_app(environ, start_response):
     import sys
     import pprint
@@ -16,6 +30,7 @@ def wsgi_app(environ, start_response):
     if stgrade != '' and stclass != '':
         output += 'grade=' + stgrade + '\n'
         output += 'class=' + stclass + '\n'
+        output_excel(stgrade,stclass,outpath)
     else:
         output = '<form>'
         output += 'Grade: '
