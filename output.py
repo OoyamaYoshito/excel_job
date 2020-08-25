@@ -27,7 +27,7 @@ def question_result_output(personal_info, answerdata, ws, labels, outputpath='.'
             ws.cell(7+i,2+j,data)
 
     #グラフ画像挿入
-    chart_python.draw_chart(answerdata, labels)
+    chart_python.draw_chart(answerdata, labels, outputpath)
     img = openpyxl.drawing.image.Image(outputpath + '/graph.png')
     ws.add_image( img, 'B13' )
 
@@ -47,7 +47,7 @@ def output_class(stgrade, stclass, outputpath='.', studentpath='studentlist', an
         wb.save(fn)
     except PermissionError:
         print ("出力先のファイルが開かれているため、出力できません: " + fn)
-        sys.exit()
+        return
     for i, student_number in enumerate(list(classdata.index)):
         wb = openpyxl.load_workbook(fn)
         personal_info = classdata.loc[student_number].values
