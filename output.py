@@ -27,7 +27,7 @@ def question_result_output(personal_info, answerdata, ws, labels, outputpath='.'
             ws.cell(7+i,2+j,data)
 
     #グラフ画像挿入
-    chart_python.draw_chart(answerdata, labels)
+    chart_python.draw_chart(answerdata, labels, outputpath)
     img = openpyxl.drawing.image.Image(outputpath + '/graph.png')
     ws.add_image( img, 'B13' )
 
