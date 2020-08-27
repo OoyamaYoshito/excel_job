@@ -47,7 +47,7 @@ def wsgi_app(environ, start_response):
     else:
         output = '<form>'
         output += 'Grade: '
-        for g in [1,2,3,4]:
+        for g in [1,2]:
             output += '<input type="radio" name="grade" value="' + str(g) + '">' + str(g)
         output += '<br/>'
         output += 'Class: '
