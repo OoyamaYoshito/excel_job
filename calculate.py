@@ -58,8 +58,8 @@ def search(age, class_name, studentpath="studentlist", answerpath="answersdata")
         df_answerdata.append(df_answers)
 
     if not df_answerdata:
-        print ("アンケート回答データが取得できません")
-        return
+        print ("01アンケート回答データが取得できません")
+        raise ValueError("01アンケート回答データが取得できません")
     df_answer = pd.concat(df_answerdata)
 
     #学生のリストを読み込む
@@ -81,8 +81,8 @@ def search(age, class_name, studentpath="studentlist", answerpath="answersdata")
             df_studentlists.append(input_sheet_df.set_index("学籍番号"))
 
     if not df_studentlists:
-        print ("学生情報データ(studentlist)が取得できません")
-        return
+        print ("02学生情報データ(studentlist)が取得できません")
+        raise ValueError("02学生情報データ(studentlist)が取得できません")
     df_studentlist = pd.concat(df_studentlists)
 
     #指定されたクラスのデータを引き出す

@@ -38,16 +38,16 @@ def output_class(stgrade, stclass, outputpath='.', studentpath='studentlist', an
     wb = openpyxl.load_workbook('templete.xlsx')
     ws = wb.worksheets[0]
     if classdata.index.size == 0:
-        print ("クラスのデータが取得できませんでした")
-        return
+        print ("11クラスのデータが取得できませんでした")
+        raise ValueError("11クラスのデータが取得できませんでした")
     for sheet_name in list(classdata.index):
         ws_copy = wb.copy_worksheet(ws)
         ws_copy.title=str(sheet_name)
     try:
         wb.save(fn)
     except PermissionError:
-        print ("出力先のファイルが開かれているため、出力できません: " + fn)
-        return
+        print ("12出力先のファイルが開かれているため、出力できません: " + fn)
+        raise ValueError("12出力先のファイルが開かれているため、出力できません: " + fn)
     for i, student_number in enumerate(list(classdata.index)):
         wb = openpyxl.load_workbook(fn)
         personal_info = classdata.loc[student_number].values
