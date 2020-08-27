@@ -7,10 +7,13 @@ def output_excel(stgrade, stclass, outpath):
     import os
     os.chdir(os.path.dirname(__file__))
     targets=[]
-    for g in stgrade:
-        for c in stclass:
-            output.output_class(g,c,outputpath=outpath,studentpath=student,answerpath=answer)
-            targets.append('output' + g + c + '.xlsx')
+    try:
+        for g in stgrade:
+            for c in stclass:
+                output.output_class(g,c,outputpath=outpath,studentpath=student,answerpath=answer)
+                targets.append('output' + g + c + '.xlsx')
+    except ValueError as e:
+        return e.args[0]
     import zipfile
     zipname=outpath+'/output'+stgrade+stclass+'.zip'
     with zipfile.ZipFile(zipname,'w',compression=zipfile.ZIP_DEFLATED) as zip:
@@ -35,19 +38,23 @@ def wsgi_app(environ, start_response):
         if q.startswith('class='):
             stclass+=q.replace('class=','')
     if stgrade != '' and stclass != '':
-        output += 'grade=' + stgrade + '\n'
-        output += 'class=' + stclass + '\n'
         zip = output_excel(stgrade,stclass,outpath)
-        headers = [('Content-type', 'application/zip'),
-                   ('Content-Length', str(os.path.getsize(zip))),
-                   ('Content-Disposition', 'attachment; filename="' + os.path.basename(zip) + '"')]
-        with open(zip,'rb') as f:
-            output=f.read()
-            f.close()
+        if os.path.isfile(zip):
+            headers = [('Content-type', 'application/zip'),
+                       ('Content-Length', str(os.path.getsize(zip))),
+                       ('Content-Disposition', 'attachment; filename="' + os.path.basename(zip) + '"')]
+            with open(zip,'rb') as f:
+                output=f.read()
+                f.close()
+        else:
+            output = zip
+            output = output.encode('utf-8')
+            headers = [('Content-type', 'text/html; charset=utf-8'),
+                       ('Content-Length', str(len(output)))]
     else:
         output = '<form>'
         output += 'Grade: '
-        for g in [1,2,3,4]:
+        for g in [1,2]:
             output += '<input type="radio" name="grade" value="' + str(g) + '">' + str(g)
         output += '<br/>'
         output += 'Class: '
@@ -57,7 +64,7 @@ def wsgi_app(environ, start_response):
         output += '<input type="submit" value="send"/>'
         output += '</form>'
         output = output.encode('utf-8')
-        headers = [('Content-type', 'text/html'),
+        headers = [('Content-type', 'text/html; charset=utf-8'),
                    ('Content-Length', str(len(output)))]
     status = '200 OK'
     start_response(status, headers)
