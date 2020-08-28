@@ -4,8 +4,9 @@ from PIL import Image
 import numpy as np
 import openpyxl
 import matplotlib
-font = {"family":"IPAexGothic"}
-matplotlib.rc('font', **font)
+#日本語対応のフォント指定はmatplotlibrcで！
+#font = {"family":"IPAexGothic"}
+#matplotlib.rc('font', **font)
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 from matplotlib.path import Path
