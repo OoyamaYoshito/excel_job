@@ -65,6 +65,7 @@ def search(age, class_name, studentpath="studentlist", answerpath="answersdata")
         print (filename)
         input_csv = pd.read_csv(filename)
         input_csv['学籍番号']=input_csv['ユーザ名'].replace('b([0-9]+)',r'\1',regex=True)
+        input_csv['学籍番号']=pd.to_numeric(input_csv['学籍番号'], errors='coerce')
         #print(input_csv)
         df_answers = input_csv.set_index('学籍番号')
         #print(df_answers)
@@ -77,7 +78,6 @@ def search(age, class_name, studentpath="studentlist", answerpath="answersdata")
         df_atti_2 =df_answers.loc[:,["Q02_2) プログラムが正しく動かないときは，友人に相談する","Q08_8) プログラミングを学習するとき，友人と協力する","Q24_24) プログラムが正しく動かないときは，TAやチューターに"]].mean(axis='columns') 
         df_atti_3 =df_answers.loc[:,["Q03_3) プログラミングを学習するとき，Web上にある情報やリフ","Q15_15) プログラムが正しく動かないとき，Web上にある情報や","Q21_21) エラーメッセージの意味がわからないときは，辞書を使っ"]].mean(axis='columns') 
         df_answers = pd.concat([df_program,df_know_1,df_know_2,df_know_3,df_know_4,df_atti_1,df_atti_2,df_atti_3],axis=1)
-        #print(df_program,df_know_1,df_know_2,df_know_3,df_know_4)
         df_answers.columns=["プログラミング得意度","構想・設計","エラーメッセージ理解","デバッグ","文法知識","積極性","他者活用","Web活用"]
         df_answerdata.append(df_answers)
         #print(df_answers)
@@ -127,14 +127,13 @@ def search(age, class_name, studentpath="studentlist", answerpath="answersdata")
     df_mean = []
     for i, df_answer in enumerate(df_answerdata):
         df_combined = pd.concat([df_answer,df_classdata], axis=1, join="inner")
-        print(df_combined)
         df_combined =df_combined.drop(columns=["Name(J)"],errors='ignore')
         df_combined =df_combined.drop(columns=["Name_J"],errors='ignore')
         df_combined =df_combined.drop(columns=["Sex","Dept. & Course","Grade","Class"])
         if len(df_combined.index) > 0:
             df_mean = df_combined.mean()
         df_combineds.append(df_combined)
-    print(df_mean)
+    #print(df_mean)
 
     #excelファイルとして出力
     #df_output.to_excel("output.xlsx")
