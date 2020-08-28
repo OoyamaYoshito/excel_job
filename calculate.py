@@ -18,9 +18,6 @@ def search(age, class_name, studentpath="studentlist", answerpath="answersdata")
         #シートの１番目をDataflameに変換
         input_sheet_df = input_book.parse(input_sheet_name[0])
 
-        #indexを学籍番号に変更
-        #index名に学籍番号（は不要）が含まれるので削除したい
-        
         student_number_cell=[s for s in list(input_sheet_df.columns.values) if "学籍番号" in s]
         skip=0
         #「学籍番号」を含むセルがなかったら、見つけるまで行を読み飛ばす
@@ -30,6 +27,9 @@ def search(age, class_name, studentpath="studentlist", answerpath="answersdata")
             columns = [str(s) for s in input_sheet_df.columns.values]
             student_number_cell=[s for s in columns if "学籍番号" in s]
         df_answers = input_sheet_df.set_index(student_number_cell[0])
+        #input_sheet_df['学籍番号']=input_sheet_df[student_number_cell[0]].astype('int64')
+        #input_sheet_df['学籍番号']=input_sheet_df["# ユーザID"].replace('b([0-9]+)',r'\1',regex=True)
+        #df_answers = input_sheet_df.set_index('学籍番号')
         #print(df_answers)
 
         #直書きしてるが、表を参照するようにしたい
@@ -56,6 +56,31 @@ def search(age, class_name, studentpath="studentlist", answerpath="answersdata")
 
         df_answers.columns=["プログラミング得意度","構想・設計","エラーメッセージ理解","デバッグ","文法知識","積極性","他者活用","Web活用"]
         df_answerdata.append(df_answers)
+        #print(df_answers)
+
+    # support Moodleアンケート
+    input_files = glob.glob(answerpath+"/*/*.csv")
+    input_files.sort()
+    for i, filename in enumerate(input_files):
+        print (filename)
+        input_csv = pd.read_csv(filename)
+        input_csv['学籍番号']=input_csv['ユーザ名'].replace('b([0-9]+)',r'\1',regex=True)
+        input_csv['学籍番号']=pd.to_numeric(input_csv['学籍番号'], errors='coerce')
+        #print(input_csv)
+        df_answers = input_csv.set_index('学籍番号')
+        #print(df_answers)
+        df_program=df_answers.loc[:,["Q31_31) プログラミングが得意である"]].mean(axis='columns') 
+        df_know_1 =df_answers.loc[:,["Q04_4) 仕様書を読んでプログラムを作成するとき，プログラムの完","Q09_9) 類似のプログラムがなくても，一からプログラムを記述でき","Q14_14) 順を追って論理的にプログラムを記述できる","Q20_20) プログラムを読むことで，大まかな動作を想像できる","Q25_25) プログラムを読むことにより，そのプログラムがどのよう","Q29_29) プログラムが思ったとおりに動作しないとき，別のやり方"]].mean(axis='columns') 
+        df_know_2 =df_answers.loc[:,["Q11_11) エラーメッセージの英語の内容を理解できる","Q17_17) エラーメッセージが表示されたとき，そのエラーメッセー","Q23_23) エラーメッセージを読むと，どのような問題が起こってい"]].mean(axis='columns') 
+        df_know_3 =df_answers.loc[:,["Q05_5) 正しく動作しないとき，正しく動作するまでプログラムを少","Q19_19) プログラムが正しく動作しないとき，どこにバグがあるの","Q27_27) プログラムが正しく動作しないとき，プログラムのロジッ","Q30_30) プログラムが正しく動作しないとき，変数の値などを変更"]].mean(axis='columns') 
+        df_know_4 =df_answers.loc[:,["Q07_7) 実行文（代入，条件分岐，繰り返し）を使うべき場所で正し","Q10_10) 複数の実行文（代入，条件分岐，繰り返し）を組み合わせ","Q13_13) 配列を使うべき場所で正しく使える","Q16_16) 関数(サブプログラム，ブロック，メソッドなど）を使う","Q22_22) ライブラリ（ライブラリ関数，外部クラスなど）を使うべ","Q28_28) 機能が似ている実行文（代入，条件分岐，繰り返し）の違"]].mean(axis='columns') 
+        df_atti_1 =df_answers.loc[:,["Q01_1) プログラミングを積極的に勉強している","Q06_6) 講義以外でも，独学でプログラミングを勉強する","Q12_12) 難しいプログラミングにも挑戦する","Q18_18) プログラミングを学習するとき，さまざまなプログラム作","Q26_26) プログラミングの経験を積むために，さまざまプログラム"]].mean(axis='columns') 
+        df_atti_2 =df_answers.loc[:,["Q02_2) プログラムが正しく動かないときは，友人に相談する","Q08_8) プログラミングを学習するとき，友人と協力する","Q24_24) プログラムが正しく動かないときは，TAやチューターに"]].mean(axis='columns') 
+        df_atti_3 =df_answers.loc[:,["Q03_3) プログラミングを学習するとき，Web上にある情報やリフ","Q15_15) プログラムが正しく動かないとき，Web上にある情報や","Q21_21) エラーメッセージの意味がわからないときは，辞書を使っ"]].mean(axis='columns') 
+        df_answers = pd.concat([df_program,df_know_1,df_know_2,df_know_3,df_know_4,df_atti_1,df_atti_2,df_atti_3],axis=1)
+        df_answers.columns=["プログラミング得意度","構想・設計","エラーメッセージ理解","デバッグ","文法知識","積極性","他者活用","Web活用"]
+        df_answerdata.append(df_answers)
+        #print(df_answers)
 
     if not df_answerdata:
         print ("01アンケート回答データが取得できません")
@@ -95,7 +120,7 @@ def search(age, class_name, studentpath="studentlist", answerpath="answersdata")
     df_classdata = df_classdata.drop(columns=["Name\n(J Kana)","Name(E)"],errors='ignore')
     df_classdata = df_classdata.drop(columns=["Name_J kana","Name_E"],errors='ignore')
     df_classdata = df_classdata.iloc[:,[0,1,3,4,2]]
-    print(df_classdata)
+    #print(df_classdata)
 
     #アンケート結果用の数字データをもつ配列
     df_combineds = []
@@ -108,7 +133,7 @@ def search(age, class_name, studentpath="studentlist", answerpath="answersdata")
         if len(df_combined.index) > 0:
             df_mean = df_combined.mean()
         df_combineds.append(df_combined)
-    print(df_mean)
+    #print(df_mean)
 
     #excelファイルとして出力
     #df_output.to_excel("output.xlsx")
