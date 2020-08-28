@@ -1,4 +1,4 @@
-outpath="/Users/member/git/excel_job/test"
+#outpath="/Users/member/git/excel_job/test"
 
 def output_excel(stgrade, stclass, outpath):
     import output
@@ -38,6 +38,8 @@ def wsgi_app(environ, start_response):
         if q.startswith('class='):
             stclass+=q.replace('class=','')
     if stgrade != '' and stclass != '':
+        import tempfile
+        outpath=tempfile.mkdtemp()
         zip = output_excel(stgrade,stclass,outpath)
         if os.path.isfile(zip):
             headers = [('Content-type', 'application/zip'),
