@@ -6,6 +6,13 @@ import sys
 
 #データを整形し、学年とクラス名が一致する情報のみを出力する
 def search(age, class_name, studentpath="studentlist", answerpath="answersdata"):
+    df_answerdata = get_answerdata(answerpath)
+    df_classdata = get_classstudents(age, class_name, studentpath)
+    df_combineds, df_mean = calc_mean(df_answerdata, df_classdata)
+    return df_classdata, df_combineds, df_mean
+
+### アンケート回答データを収集する
+def get_answerdata(answerpath="answersdata"):
     input_files = glob.glob(answerpath+"/*.xls") + glob.glob(answerpath+"/*.xlsx") + glob.glob(answerpath+"/*/*.xls") + glob.glob(answerpath+"/*/*.xlsx")
     input_files.sort()
     df_answerdata = []
@@ -86,7 +93,10 @@ def search(age, class_name, studentpath="studentlist", answerpath="answersdata")
         print ("01アンケート回答データが取得できません")
         raise ValueError("01アンケート回答データが取得できません")
     df_answer = pd.concat(df_answerdata)
+    return df_answerdata
 
+### 指定された学年/クラスの学生情報を収集する
+def get_classstudents(age, class_name, studentpath="studentlist"):
     #学生のリストを読み込む
     input_files =  glob.glob(studentpath + "/*.xlsx")
     df_studentlists = []
@@ -121,7 +131,10 @@ def search(age, class_name, studentpath="studentlist", answerpath="answersdata")
     df_classdata = df_classdata.drop(columns=["Name_J kana","Name_E"],errors='ignore')
     df_classdata = df_classdata.iloc[:,[0,1,3,4,2]]
     #print(df_classdata)
+    return df_classdata
 
+### 対象学生内の平均を計算
+def calc_mean(df_answerdata,df_classdata):
     #アンケート結果用の数字データをもつ配列
     df_combineds = []
     df_mean = []
@@ -138,7 +151,7 @@ def search(age, class_name, studentpath="studentlist", answerpath="answersdata")
     #excelファイルとして出力
     #df_output.to_excel("output.xlsx")
 
-    return df_classdata, df_combineds, df_mean
+    return df_combineds, df_mean
 
 if __name__ == "__main__":
     print(search('2','Z')) 
