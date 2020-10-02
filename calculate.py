@@ -95,6 +95,45 @@ def get_answerdata(answerpath="answersdata"):
     df_answer = pd.concat(df_answerdata)
     return df_answerdata
 
+### 指定された学生の学生情報を収集する
+def get_studentdata(students, studentpath="studentlist"):
+    #学生のリストを読み込む
+    input_files =  glob.glob(studentpath + "/*.xlsx")
+    df_studentlists = []
+    for i, filename in enumerate(input_files):
+        input_book = pd.ExcelFile(filename)
+
+        #sheet_namesメソッドでExcelブック内の各シートの名前をリストで取得できる
+        input_sheet_name = input_book.sheet_names
+
+        #シートの１番目をDataflameに変換
+        input_sheet_df = input_book.parse(input_sheet_name[0])
+
+        #学生情報のdataframeを作成
+        try:
+            df_studentlists.append(input_sheet_df.set_index("ID"))
+        except KeyError:
+            df_studentlists.append(input_sheet_df.set_index("学籍番号"))
+
+    if not df_studentlists:
+        print ("02学生情報データ(studentlist)が取得できません")
+        raise ValueError("02学生情報データ(studentlist)が取得できません")
+    df_studentlist = pd.concat(df_studentlists)
+
+    #指定されたクラスのデータを引き出す
+    try:
+        df_classdata = df_studentlist.query("(ID in @students)")
+    except pd.core.computation.ops.UndefinedVariableError:
+        df_classdata = df_studentlist.query("(学籍番号 in @students)")
+    df_classdata = df_classdata.drop(columns=["Absence","Ent.year"])
+    df_classdata = df_classdata.drop(columns=["Name(J_Kana)","Name(E) "],errors='ignore')
+    df_classdata = df_classdata.drop(columns=["Name\n(J Kana)","Name(E)"],errors='ignore')
+    df_classdata = df_classdata.drop(columns=["Name_J kana","Name_E"],errors='ignore')
+    df_classdata = df_classdata.iloc[:,[0,1,3,4,2]]
+    print(df_classdata)
+    return df_classdata
+
+
 ### 指定された学年/クラスの学生情報を収集する
 def get_classstudents(age, class_name, studentpath="studentlist"):
     #学生のリストを読み込む
