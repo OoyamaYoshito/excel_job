@@ -30,14 +30,17 @@ def wsgi_app(environ, start_response):
     import output
     #output = pprint.pformat(os.listdir('.')) + '\n'
     output = sys.version + '\n' 
+    select = ''
     stgrade = ''
     stclass = ''
     for q in environ['QUERY_STRING'].split('&'):
+        if q.startswith('select='):
+            select=q.replace('select=','')
         if q.startswith('grade='):
             stgrade=q.replace('grade=','')
         if q.startswith('class='):
             stclass+=q.replace('class=','')
-    if stgrade != '' and stclass != '':
+    if select == 'byclass' and stgrade != '' and stclass != '':
         import tempfile
         outpath=tempfile.mkdtemp()
         zip = output_excel(stgrade,stclass,outpath)
@@ -55,6 +58,10 @@ def wsgi_app(environ, start_response):
                        ('Content-Length', str(len(output)))]
     else:
         output = '<form>'
+        output += 'Select: '
+        output += '<input type="radio" name="select" value="byclass" checked>By Class'
+        output += '<input type="radio" name="select" value="bystudents">By Students'
+        output += '<br/>'
         output += 'Grade: '
         for g in [1,2]:
             output += '<input type="radio" name="grade" value="' + str(g) + '">' + str(g)
@@ -62,6 +69,8 @@ def wsgi_app(environ, start_response):
         output += 'Class: '
         for c in 'ABCDEFGHIJKL':
             output += '<input type="checkbox" name="class" value="' + str(c) + '">' + str(c)
+        output += '<br/>'
+        output += 'Students: <textarea name="students" disabled></textarea>'
         output += '<br/>'
         output += '<input type="submit" value="send"/>'
         output += '</form>'
