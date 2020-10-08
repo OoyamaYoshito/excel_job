@@ -120,7 +120,7 @@ def wsgi_app(environ, start_response):
         for c in 'ABCDEFGHIJKL':
             output += '<input type="checkbox" name="class" value="' + str(c) + '">' + str(c)
         output += '<br/>'
-        output += 'Students: <textarea name="students" disabled></textarea>'
+        output += 'Students: <textarea name="students" rows="20" disabled></textarea>'
         output += '<br/>'
         output += '<input type="submit" value="send"/>'
         output += '</form>'
