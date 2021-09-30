@@ -44,6 +44,9 @@ def output_students(students, outputpath='.', studentpath='studentlist', answerp
     if classdata.index.size == 0:
         print ('11クラスのデータが取得できませんでした')
         raise ValueError('11クラスのデータが取得できませんでした')
+    if len(averagedata)==0:
+        print('12アンケート回答データが見つからない')
+        raise ValueError('12アンケート回答データが見つからない')
     for sheet_name in list(classdata.index):
         ws_copy = wb.copy_worksheet(ws)
         ws_copy.title=str(sheet_name)
