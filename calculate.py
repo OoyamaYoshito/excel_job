@@ -13,14 +13,7 @@ def search(age, class_name, studentpath="studentlist", answerpath="answersdata")
     return df_classdata, df_combineds, df_mean
 
 ### アンケート回答データを収集する
-def get_answerdata(answerpath="answersdata"):
-    today=datetime.date.today()
-    year=today.year
-    if today.month < 4:
-        year=year-1
-    yearre="/" + str(year)
-    prevre="/" + str(year-1)
-    input_files = glob.glob(answerpath+prevre+"0[4-9]*.xls*") + glob.glob(answerpath+prevre+"0[4-9]*/*.xls*") + glob.glob(answerpath+yearre+"0[4-9]*.xls*") + glob.glob(answerpath+yearre+"0[4-9]*/*.xls*")
+def get_answerdata_from_xls(input_files):
     input_files.sort()
     df_answerdata = []
     for i, filename in enumerate(input_files):
@@ -41,10 +34,6 @@ def get_answerdata(answerpath="answersdata"):
             columns = [str(s) for s in input_sheet_df.columns.values]
             student_number_cell=[s for s in columns if "学籍番号" in s]
         df_answers = input_sheet_df.set_index(student_number_cell[0])
-        #input_sheet_df['学籍番号']=input_sheet_df[student_number_cell[0]].astype('int64')
-        #input_sheet_df['学籍番号']=input_sheet_df["# ユーザID"].replace('b([0-9]+)',r'\1',regex=True)
-        #df_answers = input_sheet_df.set_index('学籍番号')
-        #print(df_answers)
 
         #直書きしてるが、表を参照するようにしたい
 
@@ -71,10 +60,11 @@ def get_answerdata(answerpath="answersdata"):
         df_answers.columns=["プログラミング得意度","構想・設計","エラーメッセージ理解","デバッグ","文法知識","積極性","他者活用","Web活用"]
         df_answerdata.append(df_answers)
         #print(df_answers)
+    return df_answerdata
 
-    # support Moodleアンケート
-    input_files = glob.glob(answerpath+prevre+"0[4-9]*/*.csv") + glob.glob(answerpath+yearre+"0[4-9]*/*.csv")
+def get_answerdata_from_csv(input_files):
     input_files.sort()
+    df_answerdata = []
     for i, filename in enumerate(input_files):
         print (filename)
         input_csv = pd.read_csv(filename)
@@ -95,6 +85,23 @@ def get_answerdata(answerpath="answersdata"):
         df_answers.columns=["プログラミング得意度","構想・設計","エラーメッセージ理解","デバッグ","文法知識","積極性","他者活用","Web活用"]
         df_answerdata.append(df_answers)
         #print(df_answers)
+    return df_answerdata
+
+def get_answerdata(answerpath="answersdata"):
+    today=datetime.date.today()
+    year=today.year
+    if today.month < 4:
+        year=year-1
+    yearre="/" + str(year)
+    prevre="/" + str(year-1)
+    input_files = glob.glob(answerpath+prevre+"0[4-9]*.xls*") + glob.glob(answerpath+prevre+"0[4-9]*/*.xls*") + glob.glob(answerpath+yearre+"0[4-9]*.xls*") + glob.glob(answerpath+yearre+"0[4-9]*/*.xls*")
+    df_answerdata = get_answerdata_from_xls(input_files)
+    print(len(df_answerdata))
+
+    # support Moodleアンケート
+    input_files = glob.glob(answerpath+prevre+"0[4-9]*/*.csv") + glob.glob(answerpath+yearre+"0[4-9]*/*.csv")
+    df_answerdata.extend(get_answerdata_from_csv(input_files))
+    print(len(df_answerdata))
 
     if not df_answerdata:
         print ("01アンケート回答データが取得できません")
