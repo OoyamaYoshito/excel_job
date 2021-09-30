@@ -127,6 +127,7 @@ def get_studentdata(students, studentpath="studentlist"):
         df_classdata = df_studentlist.query("(学籍番号 in @students)")
     df_classdata = df_classdata.drop(columns=["Absence","Ent.year"])
     df_classdata = df_classdata.drop(columns=["Name(J_Kana)","Name(E) "],errors='ignore')
+    df_classdata = df_classdata.drop(columns=["Name(J Kana)","Name(E)"],errors='ignore')
     df_classdata = df_classdata.drop(columns=["Name\n(J Kana)","Name(E)"],errors='ignore')
     df_classdata = df_classdata.drop(columns=["Name_J kana","Name_E"],errors='ignore')
     df_classdata = df_classdata.iloc[:,[0,1,3,4,2]]
@@ -166,6 +167,7 @@ def get_classstudents(age, class_name, studentpath="studentlist"):
         df_classdata = df_studentlist.query("(Grade == @age)&(Class == @class_name)")
     df_classdata = df_classdata.drop(columns=["Absence","Ent.year"])
     df_classdata = df_classdata.drop(columns=["Name(J_Kana)","Name(E) "],errors='ignore')
+    df_classdata = df_classdata.drop(columns=["Name(J Kana)","Name(E)"],errors='ignore')
     df_classdata = df_classdata.drop(columns=["Name\n(J Kana)","Name(E)"],errors='ignore')
     df_classdata = df_classdata.drop(columns=["Name_J kana","Name_E"],errors='ignore')
     df_classdata = df_classdata.iloc[:,[0,1,3,4,2]]
@@ -181,7 +183,7 @@ def calc_mean(df_answerdata,df_classdata):
         df_combined = pd.concat([df_answer,df_classdata], axis=1, join="inner")
         df_combined =df_combined.drop(columns=["Name(J)"],errors='ignore')
         df_combined =df_combined.drop(columns=["Name_J"],errors='ignore')
-        df_combined =df_combined.drop(columns=["Sex","Dept. & Course","Grade","Class"])
+        df_combined =df_combined.drop(columns=["Sex","Dept. & Course","Grade","Class"],errors='ignore')
         if len(df_combined.index) > 0:
             df_mean = df_combined.mean()
         df_combineds.append(df_combined)
