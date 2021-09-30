@@ -198,13 +198,16 @@ def calc_mean(df_answerdata,df_classdata):
     df_mean = []
     for i, df_answerym in enumerate(df_answerdata):
         (ym,df_answer)=df_answerym
-        df_combined = pd.concat([df_answer,df_classdata], axis=1, join="inner")
-        df_combined =df_combined.drop(columns=["Name(J)"],errors='ignore')
-        df_combined =df_combined.drop(columns=["Name_J"],errors='ignore')
-        df_combined =df_combined.drop(columns=["Sex","Dept. & Course","Grade","Class"],errors='ignore')
-        if len(df_combined.index) > 0:
-            df_mean = (ym,df_combined.mean())
-        df_combineds.append((ym,df_combined))
+        try:
+            df_combined = pd.concat([df_answer,df_classdata], axis=1, join="inner")
+            df_combined =df_combined.drop(columns=["Name(J)"],errors='ignore')
+            df_combined =df_combined.drop(columns=["Name_J"],errors='ignore')
+            df_combined =df_combined.drop(columns=["Sex","Dept. & Course","Grade","Class"],errors='ignore')
+            if len(df_combined.index) > 0:
+                df_mean = (ym,df_combined.mean())
+            df_combineds.append((ym,df_combined))
+        except ValueError:
+            print('同一学生の重複回答があるようです: ' + ym)
     #print(df_mean)
 
     #excelファイルとして出力
