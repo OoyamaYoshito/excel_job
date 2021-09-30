@@ -203,7 +203,7 @@ def calc_mean(df_answerdata,df_classdata):
         df_combined =df_combined.drop(columns=["Name_J"],errors='ignore')
         df_combined =df_combined.drop(columns=["Sex","Dept. & Course","Grade","Class"],errors='ignore')
         if len(df_combined.index) > 0:
-            df_mean = df_combined.mean()
+            df_mean = (ym,df_combined.mean())
         df_combineds.append((ym,df_combined))
     #print(df_mean)
 
