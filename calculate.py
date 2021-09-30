@@ -4,6 +4,7 @@ import pandas as pd
 import glob
 import sys
 import datetime
+import re
 
 #データを整形し、学年とクラス名が一致する情報のみを出力する
 def search(age, class_name, studentpath="studentlist", answerpath="answersdata"):
@@ -58,7 +59,8 @@ def get_answerdata_from_xls(input_files):
         df_answers = pd.concat([df_program,df_know_1,df_know_2,df_know_3,df_know_4,df_atti_1,df_atti_2,df_atti_3],axis=1)
 
         df_answers.columns=["プログラミング得意度","構想・設計","エラーメッセージ理解","デバッグ","文法知識","積極性","他者活用","Web活用"]
-        df_answerdata.append(df_answers)
+        yearmonth=re.sub('^[^/]*/','',filename)[:6]
+        df_answerdata.append((yearmonth[:4]+'/'+yearmonth[5:],df_answers))
         #print(df_answers)
     return df_answerdata
 
@@ -83,7 +85,8 @@ def get_answerdata_from_csv(input_files):
         df_atti_3 =df_answers.loc[:,["Q03_3) プログラミングを学習するとき，Web上にある情報やリフ","Q15_15) プログラムが正しく動かないとき，Web上にある情報や","Q21_21) エラーメッセージの意味がわからないときは，辞書を使っ"]].mean(axis='columns') 
         df_answers = pd.concat([df_program,df_know_1,df_know_2,df_know_3,df_know_4,df_atti_1,df_atti_2,df_atti_3],axis=1)
         df_answers.columns=["プログラミング得意度","構想・設計","エラーメッセージ理解","デバッグ","文法知識","積極性","他者活用","Web活用"]
-        df_answerdata.append(df_answers)
+        yearmonth=re.sub('^[^/]*/','',filename)[:6]
+        df_answerdata.append((yearmonth[:4]+'/'+yearmonth[5:],df_answers))
         #print(df_answers)
     return df_answerdata
 
@@ -106,7 +109,7 @@ def get_answerdata(answerpath="answersdata"):
     if not df_answerdata:
         print ("01アンケート回答データが取得できません")
         raise ValueError("01アンケート回答データが取得できません")
-    df_answer = pd.concat(df_answerdata)
+    #df_answer = pd.concat(df_answerdata)
     return df_answerdata
 
 ### 指定された学生の学生情報を収集する
@@ -193,14 +196,15 @@ def calc_mean(df_answerdata,df_classdata):
     #アンケート結果用の数字データをもつ配列
     df_combineds = []
     df_mean = []
-    for i, df_answer in enumerate(df_answerdata):
+    for i, df_answerym in enumerate(df_answerdata):
+        (ym,df_answer)=df_answerym
         df_combined = pd.concat([df_answer,df_classdata], axis=1, join="inner")
         df_combined =df_combined.drop(columns=["Name(J)"],errors='ignore')
         df_combined =df_combined.drop(columns=["Name_J"],errors='ignore')
         df_combined =df_combined.drop(columns=["Sex","Dept. & Course","Grade","Class"],errors='ignore')
         if len(df_combined.index) > 0:
             df_mean = df_combined.mean()
-        df_combineds.append(df_combined)
+        df_combineds.append((ym,df_combined))
     #print(df_mean)
 
     #excelファイルとして出力

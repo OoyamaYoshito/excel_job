@@ -59,16 +59,20 @@ def output_students(students, outputpath='.', studentpath='studentlist', answerp
         stclass = personal_info[3][1]
         personal_info[0] = str(student_number) + " " + personal_info[0]
         answerdata = []
-        for yeardata in answerdatas:
+        labels = ()
+        for (ym,yeardata) in answerdatas:
             if student_number in list(yeardata.index):
                 answerdata.append(yeardata.loc[student_number].values)
+                labels = labels + (ym,)
         if len(answerdata) > 3:
             print ("13回答回数が3回を超えている学生がいます: " + str(student_number))
             raise ValueError("13回答回数が3回を超えている学生がいます: " + str(student_number))
-        if stclass in ["G","H","I"]:
-            labels = ('1年前期終了時', '2年後期開始時', '2年後期終了時')
-        else:
-            labels = ('1年前期終了時', '2年前期開始時', '2年前期終了時')
+        #if stclass in ["G","H","I"]:
+        #    labels = ('1年前期終了時', '2年後期開始時', '2年後期終了時')
+        #else:
+        #    labels = ('1年前期終了時', '2年前期開始時', '2年前期終了時')
+        for _ in range(3-len(labels)):
+            labels = labels + ('',)
         labels = labels + (labels[len(answerdata)-1]+'平均',)
         for _ in range(3-len(answerdata)):
             answerdata.append([None,None,None,None,None,None,None,None])
