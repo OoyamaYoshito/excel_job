@@ -53,20 +53,24 @@ def output_class(stgrade, stclass, outputpath='.', studentpath='studentlist', an
         personal_info = classdata.loc[student_number].values
         personal_info[0] = str(student_number) + " " + personal_info[0]
         answerdata = []
-        for yeardata in answerdatas:
+        labels = ()
+        for (ym,yeardata) in answerdatas:
             if student_number in list(yeardata.index):
                 answerdata.append(yeardata.loc[student_number].values)
+                labels = labels + (ym,)
         if len(answerdata) > 3:
             print ("13回答回数が3回を超えている学生がいます: " + str(student_number))
             raise ValueError("13回答回数が3回を超えている学生がいます: " + str(student_number))
-        if stclass in ["G","H","I"]:
-            labels = ('1年前期終了時', '2年後期開始時', '2年後期終了時')
-        else:
-            labels = ('1年前期終了時', '2年前期開始時', '2年前期終了時')
-        labels = labels + (labels[len(answerdata)-1]+'平均',)
+        #if stclass in ["G","H","I"]:
+        #    labels = ('1年前期終了時', '2年後期開始時', '2年後期終了時')
+        #else:
+        #    labels = ('1年前期終了時', '2年前期開始時', '2年前期終了時')
+        for _ in range(3-len(labels)):
+            labels = labels + ('',)
+        labels = labels + (averagedata[0]+'平均',)
         for _ in range(3-len(answerdata)):
             answerdata.append([0,0,0,0,0,0,0,0])
-        answerdata.append(averagedata)
+        answerdata.append(averagedata[1])
         question_result_output(personal_info,answerdata,wb.worksheets[i+1],labels,outputpath)
         wb.save(fn)
 
