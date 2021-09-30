@@ -73,10 +73,10 @@ def output_students(students, outputpath='.', studentpath='studentlist', answerp
         #    labels = ('1年前期終了時', '2年前期開始時', '2年前期終了時')
         for _ in range(3-len(labels)):
             labels = labels + ('',)
-        labels = labels + (labels[len(answerdata)-1]+'平均',)
+        labels = labels + (averagedata[0]+'平均',)
         for _ in range(3-len(answerdata)):
             answerdata.append([None,None,None,None,None,None,None,None])
-        answerdata.append(averagedata)
+        answerdata.append(averagedata[1])
         question_result_output(personal_info,answerdata,wb.worksheets[i+1],labels,outputpath)
         wb.save(fn)
 
