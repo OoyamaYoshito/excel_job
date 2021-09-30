@@ -97,12 +97,29 @@ def get_answerdata(answerpath="answersdata"):
         year=year-1
     yearre="/" + str(year)
     prevre="/" + str(year-1)
-    input_files = glob.glob(answerpath+prevre+"0[4-9]*.xls*") + glob.glob(answerpath+prevre+"0[4-9]*/*.xls*") + glob.glob(answerpath+yearre+"0[4-9]*.xls*") + glob.glob(answerpath+yearre+"0[4-9]*/*.xls*")
+    nextre="/" + str(year+1)
+    input_files = glob.glob(answerpath+prevre+"0[4-9]*.xls*") \
+        + glob.glob(answerpath+prevre+"0[4-9]*/*.xls*") \
+        + glob.glob(answerpath+prevre+"1[0-2]*.xls*") \
+        + glob.glob(answerpath+prevre+"1[0-2]*/*.xls*") \
+        + glob.glob(answerpath+yearre+"0[1-3]*.xls*") \
+        + glob.glob(answerpath+yearre+"0[1-3]*/*.xls*") \
+        + glob.glob(answerpath+yearre+"0[4-9]*.xls*") \
+        + glob.glob(answerpath+yearre+"0[4-9]*/*.xls*") \
+        + glob.glob(answerpath+yearre+"1[0-2]*.xls*") \
+        + glob.glob(answerpath+yearre+"1[0-2]*/*.xls*") \
+        + glob.glob(answerpath+nextre+"0[1-3]*.xls*") \
+        + glob.glob(answerpath+nextre+"0[1-3]*/*.xls*")
     df_answerdata = get_answerdata_from_xls(input_files)
     print(len(df_answerdata))
 
     # support Moodleアンケート
-    input_files = glob.glob(answerpath+prevre+"0[4-9]*/*.csv") + glob.glob(answerpath+yearre+"0[4-9]*/*.csv")
+    input_files = glob.glob(answerpath+prevre+"0[4-9]*/*.csv") \
+        + glob.glob(answerpath+prevre+"1[0-2]*/*.csv") \
+        + glob.glob(answerpath+yearre+"0[1-3]*/*.csv") \
+        + glob.glob(answerpath+yearre+"0[4-9]*/*.csv") \
+        + glob.glob(answerpath+yearre+"1[0-2]*/*.csv") \
+        + glob.glob(answerpath+nextre+"0[1-3]*/*.csv")
     df_answerdata.extend(get_answerdata_from_csv(input_files))
     print(len(df_answerdata))
 
