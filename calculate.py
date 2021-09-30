@@ -167,6 +167,7 @@ def get_classstudents(age, class_name, studentpath="studentlist"):
         df_classdata = df_studentlist.query("(Grade == @age)&(Class == @class_name)")
     df_classdata = df_classdata.drop(columns=["Absence","Ent.year"])
     df_classdata = df_classdata.drop(columns=["Name(J_Kana)","Name(E) "],errors='ignore')
+    df_classdata = df_classdata.drop(columns=["Name(J Kana)","Name(E)"],errors='ignore')
     df_classdata = df_classdata.drop(columns=["Name\n(J Kana)","Name(E)"],errors='ignore')
     df_classdata = df_classdata.drop(columns=["Name_J kana","Name_E"],errors='ignore')
     df_classdata = df_classdata.iloc[:,[0,1,3,4,2]]
