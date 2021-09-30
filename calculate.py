@@ -3,6 +3,7 @@
 import pandas as pd
 import glob
 import sys
+import datetime
 
 #データを整形し、学年とクラス名が一致する情報のみを出力する
 def search(age, class_name, studentpath="studentlist", answerpath="answersdata"):
@@ -13,7 +14,13 @@ def search(age, class_name, studentpath="studentlist", answerpath="answersdata")
 
 ### アンケート回答データを収集する
 def get_answerdata(answerpath="answersdata"):
-    input_files = glob.glob(answerpath+"/*.xls") + glob.glob(answerpath+"/*.xlsx") + glob.glob(answerpath+"/*/*.xls") + glob.glob(answerpath+"/*/*.xlsx")
+    today=datetime.date.today()
+    year=today.year
+    if today.month < 4:
+        year=year-1
+    yearre="/" + str(year)
+    prevre="/" + str(year-1)
+    input_files = glob.glob(answerpath+prevre+"0[4-9]*.xls*") + glob.glob(answerpath+prevre+"0[4-9]*/*.xls*") + glob.glob(answerpath+yearre+"0[4-9]*.xls*") + glob.glob(answerpath+yearre+"0[4-9]*/*.xls*")
     input_files.sort()
     df_answerdata = []
     for i, filename in enumerate(input_files):
@@ -66,7 +73,7 @@ def get_answerdata(answerpath="answersdata"):
         #print(df_answers)
 
     # support Moodleアンケート
-    input_files = glob.glob(answerpath+"/*/*.csv")
+    input_files = glob.glob(answerpath+prevre+"0[4-9]*/*.csv") + glob.glob(answerpath+yearre+"0[4-9]*/*.csv")
     input_files.sort()
     for i, filename in enumerate(input_files):
         print (filename)
