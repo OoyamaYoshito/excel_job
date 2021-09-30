@@ -42,16 +42,16 @@ def output_students(students, outputpath='.', studentpath='studentlist', answerp
     wb = openpyxl.load_workbook('templete.xlsx')
     ws = wb.worksheets[0]
     if classdata.index.size == 0:
-        print ("11クラスのデータが取得できませんでした")
-        raise ValueError("11クラスのデータが取得できませんでした")
+        print ('11クラスのデータが取得できませんでした')
+        raise ValueError('11クラスのデータが取得できませんでした')
     for sheet_name in list(classdata.index):
         ws_copy = wb.copy_worksheet(ws)
         ws_copy.title=str(sheet_name)
     try:
         wb.save(fn)
     except PermissionError:
-        print ("12出力先のファイルが開かれているため、出力できません: " + fn)
-        raise ValueError("12出力先のファイルが開かれているため、出力できません: " + fn)
+        print ('13出力先のファイルが開かれているため、出力できません: ' + fn)
+        raise ValueError('13出力先のファイルが開かれているため、出力できません: ' + fn)
     for i, student_number in enumerate(list(classdata.index)):
         wb = openpyxl.load_workbook(fn)
         personal_info = classdata.loc[student_number].values
@@ -65,8 +65,8 @@ def output_students(students, outputpath='.', studentpath='studentlist', answerp
                 answerdata.append(yeardata.loc[student_number].values)
                 labels = labels + (ym,)
         if len(answerdata) > 3:
-            print ("13回答回数が3回を超えている学生がいます: " + str(student_number))
-            raise ValueError("13回答回数が3回を超えている学生がいます: " + str(student_number))
+            print ('14回答回数が3回を超えている学生がいます: ' + str(student_number))
+            raise ValueError('14回答回数が3回を超えている学生がいます: ' + str(student_number))
         #if stclass in ["G","H","I"]:
         #    labels = ('1年前期終了時', '2年後期開始時', '2年後期終了時')
         #else:
